@@ -1,1 +1,1 @@
-# bootcampw2-meli-atv-invdividuais
+# Repositorio das atividades individuais do Bootcamp W2 Meli
