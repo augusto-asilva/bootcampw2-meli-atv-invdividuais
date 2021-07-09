@@ -9,6 +9,9 @@ public class Product {
     private int quantity;
     private BigDecimal value;
 
+    public Product() {
+    }
+
     public Product(int id, String description, String color, int quantity, BigDecimal value) {
         this.id = id;
         this.description = description;

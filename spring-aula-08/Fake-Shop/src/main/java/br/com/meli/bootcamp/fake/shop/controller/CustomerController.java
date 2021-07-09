@@ -24,20 +24,38 @@ public class CustomerController {
     }
 
     @PostMapping("/customers")
-    public ResponseEntity<Customer> getCustomers(@RequestBody Customer customer) {
+    public ResponseEntity<Customer> postCustomers(@RequestBody Customer customer) {
         Customer newCustomer = customerService.postCustomer(customer);
         return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }
 
     @GetMapping("/customers/{customerId}")
-    public ResponseEntity<Customer> getCustomers(@PathVariable Integer customerId) {
+    public ResponseEntity<Customer> getCustomersById(@PathVariable Integer customerId) {
         Customer customer = customerService.getCustomer(customerId);
         return new ResponseEntity<>(customer, HttpStatus.FOUND);
+    }
+
+    @PutMapping("/customers/{customerId}")
+    public ResponseEntity<String> putCustomersById(@PathVariable Integer customerId, @RequestBody Customer customer) {
+        customerService.updateCustomer(customerId, customer);
+        return new ResponseEntity<>("{ \"msg\": \"Updated customer with ID: " + customerId + "\"}", HttpStatus.FOUND);
+    }
+
+    @DeleteMapping("/customers/{customerId}")
+    public ResponseEntity<String> deleteCustomersById(@PathVariable Integer customerId) {
+        customerService.deleteCustomer(customerId);
+        return new ResponseEntity<>("{ \"msg\": \"Removed customer with ID: " + customerId + "\"}", HttpStatus.FOUND);
     }
 
     @GetMapping("/customers/{customerId}/orders")
     public ResponseEntity<List<Order>> getCustomerOrders(@PathVariable Integer customerId) {
         List<Order> orders = customerService.getCustomerOrders(customerId);
+        return new ResponseEntity<>(orders, HttpStatus.FOUND);
+    }
+
+    @GetMapping("/customers/{customerId}/orders/{orderDate}")
+    public ResponseEntity<List<Order>> getCustomerOrders(@PathVariable Integer customerId, @PathVariable String orderDate) {
+        List<Order> orders = customerService.getCustomerOrdersByDate(customerId, orderDate);
         return new ResponseEntity<>(orders, HttpStatus.FOUND);
     }
 }

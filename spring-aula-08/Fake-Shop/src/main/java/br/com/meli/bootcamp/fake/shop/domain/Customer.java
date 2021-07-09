@@ -11,6 +11,9 @@ public class Customer {
     private String telefone;
     private List<Order> orders;
 
+    public Customer() {
+    }
+
     public Customer(int id, String name, String cpf, String email, String telefone, List<Order> orders) {
         this.id = id;
         this.name = name;

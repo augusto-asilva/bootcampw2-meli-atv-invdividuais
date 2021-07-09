@@ -1,6 +1,11 @@
 package br.com.meli.bootcamp.fake.shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Order {
@@ -8,10 +13,17 @@ public class Order {
     private List<Product> products;
     private BigDecimal totalValue;
 
-    public Order(int id, List<Product> products, BigDecimal totalValue) {
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate date;
+
+    public Order() {
+    }
+
+    public Order(int id, List<Product> products, BigDecimal totalValue, LocalDate date) {
         this.id = id;
         this.products = products;
         this.totalValue = totalValue;
+        this.date = date;
     }
 
     public int getId() {
@@ -36,5 +48,13 @@ public class Order {
 
     public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
