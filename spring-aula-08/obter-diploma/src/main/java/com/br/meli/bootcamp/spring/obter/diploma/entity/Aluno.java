@@ -1,10 +1,14 @@
 package com.br.meli.bootcamp.spring.obter.diploma.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.OptionalDouble;
 
 public class Aluno {
+    @JsonProperty("name")
     private String nome;
+    @JsonProperty("subjects")
     private List<Disciplina> disciplinas;
 
     public Aluno(String nome, List<Disciplina> disciplinas) {
@@ -29,7 +33,7 @@ public class Aluno {
     }
 
     public double media() {
-        OptionalDouble media = disciplinas.stream().mapToDouble(d -> d.getNota()).average();
+        OptionalDouble media = disciplinas.stream().mapToDouble(d -> Double.valueOf(d.getNota())).average();
 
         if (media.isPresent()) {
             return media.getAsDouble();
