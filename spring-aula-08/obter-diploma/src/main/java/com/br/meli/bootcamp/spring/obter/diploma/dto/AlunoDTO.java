@@ -51,12 +51,10 @@ public class AlunoDTO {
     }
 
     public Double media() {
-        OptionalDouble media = disciplinas.stream().mapToDouble(d -> Double.valueOf(d.getNota())).average();
+        return this.media;
+    }
 
-        if (media.isPresent()) {
-            return media.getAsDouble();
-        }
-
-        return -0.0;
+    public void setMedia(double media) {
+        this.media = media;
     }
 }

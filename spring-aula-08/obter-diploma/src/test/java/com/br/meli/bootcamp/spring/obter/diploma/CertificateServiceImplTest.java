@@ -1,30 +1,32 @@
 package com.br.meli.bootcamp.spring.obter.diploma;
 
 import com.br.meli.bootcamp.spring.obter.diploma.dto.AlunoDTO;
-import com.br.meli.bootcamp.spring.obter.diploma.dto.DimplomaResponseDTO;
+import com.br.meli.bootcamp.spring.obter.diploma.dto.DiplomaResponseDTO;
 import com.br.meli.bootcamp.spring.obter.diploma.entity.Disciplina;
+import com.br.meli.bootcamp.spring.obter.diploma.service.DiplomaService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class CertificateServiceImplTest {
 
-    private static List<DimplomaResponseDTO> diplomas;
+    private static DiplomaService service;
+
+    private static List<DiplomaResponseDTO> diplomas;
     private static Validator validator;
 
     @BeforeAll
     static void init() {
-        diplomas = new ArrayList<>();
+        service = mock(DiplomaService.class);
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
@@ -38,10 +40,11 @@ public class CertificateServiceImplTest {
                 new Disciplina("Fisica III", 6)
         ));
 
-        Set<ConstraintViolation<AlunoDTO>> violations = validator.validate(alunoDTO);
+        Mockito.when(service.analyzeNotes(alunoDTO)).thenReturn(true);
+        boolean isNotesOk = service.analyzeNotes(alunoDTO);
 
-        assertEquals(0, violations.size());
-        assertNotEquals(false, violations.isEmpty());
+        assertEquals(true, isNotesOk);
+        assertNotEquals(false, isNotesOk);
     }
 
     @Test
@@ -53,10 +56,11 @@ public class CertificateServiceImplTest {
                 new Disciplina("Fis", 321)
         ));
 
-        Set<ConstraintViolation<AlunoDTO>> violations = validator.validate(alunoDTO);
+        Mockito.when(service.analyzeNotes(alunoDTO)).thenReturn(false);
+        boolean isNotesOk = service.analyzeNotes(alunoDTO);
 
-        assertEquals(5, violations.size());
-        assertNotEquals(true, violations.isEmpty());
+        assertEquals(false, isNotesOk);
+        assertNotEquals(true, isNotesOk);
     }
 
     @Test
@@ -68,14 +72,15 @@ public class CertificateServiceImplTest {
                 new Disciplina("Fisica III", 6)
         ));
 
-        Double avg = alunoDTO.media();
+        Mockito.when(service.calculateAverage(alunoDTO)).thenReturn(5.5);
+        Double avg = service.calculateAverage(alunoDTO);
 
         assertEquals(5.5, avg);
         assertNotEquals(6.0, avg);
     }
 
     @Test
-    public void shouldWriteDiplomaWithoutViolations() {
+    public void shouldWriteDiplomaSuccessfully() {
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.setNome("Augusto Alves");
         alunoDTO.setDisciplinas(Arrays.asList(
@@ -83,16 +88,15 @@ public class CertificateServiceImplTest {
                 new Disciplina("Fisica III", 7)
         ));
 
-        DimplomaResponseDTO dimplomaResponseDTO = new DimplomaResponseDTO(alunoDTO.media(), alunoDTO);
+        Mockito.when(service.post(alunoDTO)).thenReturn(true);
+        boolean hasSaved = service.post(alunoDTO);
 
-        Set<ConstraintViolation<DimplomaResponseDTO>> violations = validator.validate(dimplomaResponseDTO);
-
-        assertEquals(0, violations.size());
-        assertNotEquals(false, violations.isEmpty());
+        assertEquals(true, hasSaved);
+        assertNotEquals(false, hasSaved);
     }
 
     @Test
-    public void shouldWriteDiplomaWithViolations() {
+    public void shouldWriteDiplomaUnSuccessfully() {
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.setNome("Augusto Alves");
         alunoDTO.setDisciplinas(Arrays.asList(
@@ -100,12 +104,11 @@ public class CertificateServiceImplTest {
                 new Disciplina("Fisica III", 5)
         ));
 
-        DimplomaResponseDTO dimplomaResponseDTO = new DimplomaResponseDTO(alunoDTO.media(), alunoDTO);
+        Mockito.when(service.post(alunoDTO)).thenReturn(false);
+        boolean hasSaved = service.post(alunoDTO);
 
-        Set<ConstraintViolation<DimplomaResponseDTO>> violations = validator.validate(dimplomaResponseDTO);
-
-        assertEquals(1, violations.size());
-        assertNotEquals(true, violations.isEmpty());
+        assertEquals(false, hasSaved);
+        assertNotEquals(true, hasSaved);
     }
 
     @Test
@@ -117,9 +120,11 @@ public class CertificateServiceImplTest {
                 new Disciplina("Fisica III", 9)
         ));
 
-        DimplomaResponseDTO dimplomaResponseDTO = new DimplomaResponseDTO(alunoDTO.media(), alunoDTO);
+        Mockito.when(service.calculateAverage(alunoDTO)).thenReturn(9.5);
+        double average = service.calculateAverage(alunoDTO);
 
-        boolean hasHonor = dimplomaResponseDTO.isWithHonor();
+        Mockito.when(service.getDiplomaWithHonor(average)).thenReturn(true);
+        boolean hasHonor = service.getDiplomaWithHonor(average);
 
         assertEquals(true, hasHonor);
         assertNotEquals(false, hasHonor);

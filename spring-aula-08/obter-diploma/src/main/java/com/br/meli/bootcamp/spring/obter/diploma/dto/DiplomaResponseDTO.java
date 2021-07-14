@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-public class DimplomaResponseDTO {
+public class DiplomaResponseDTO {
     private String message;
     @Range(min = 6, max = 10)
     private Double average;
@@ -18,11 +18,11 @@ public class DimplomaResponseDTO {
     @JsonIgnore
     private boolean withHonor = false;
 
-    public DimplomaResponseDTO() {
+    public DiplomaResponseDTO() {
     }
 
 
-    public DimplomaResponseDTO(Double average, AlunoDTO alunoDTO) {
+    public DiplomaResponseDTO(Double average, AlunoDTO alunoDTO) {
         String avg_str = String.format("%.1f", average);
 
         NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
@@ -37,10 +37,6 @@ public class DimplomaResponseDTO {
         this.message = "Sua média foi de " + avg_str;
         this.average = number.doubleValue();
         this.alunoDto = alunoDTO;
-
-        if (this.average > 9) {
-            withHonor = true;
-        }
     }
 
     public String getMessage() {
