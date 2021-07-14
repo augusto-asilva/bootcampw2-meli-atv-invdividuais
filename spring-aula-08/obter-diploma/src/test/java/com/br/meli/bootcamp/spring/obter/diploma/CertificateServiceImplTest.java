@@ -27,8 +27,6 @@ public class CertificateServiceImplTest {
     @BeforeAll
     static void init() {
         service = mock(DiplomaService.class);
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
     }
 
     @Test

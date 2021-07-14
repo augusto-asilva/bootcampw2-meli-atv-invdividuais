@@ -15,7 +15,7 @@ public class DiplomaResponseDTO {
     private Double average;
     @JsonProperty("student")
     private AlunoDTO alunoDto;
-    @JsonIgnore
+
     private boolean withHonor = false;
 
     public DiplomaResponseDTO() {

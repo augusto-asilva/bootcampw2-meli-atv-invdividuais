@@ -44,6 +44,19 @@ public class DiplomaService {
         return false;
     }
 
+    public DiplomaResponseDTO postWithResponse(AlunoDTO alunoDTO) {
+        if (analyzeNotes(alunoDTO)) {
+            double mediaAluno = calculateAverage(alunoDTO);
+            alunoDTO.setMedia(mediaAluno);
+            DiplomaResponseDTO diplomaResponseDTO = new DiplomaResponseDTO(mediaAluno, alunoDTO);
+            boolean withHonor = getDiplomaWithHonor(mediaAluno);
+            diplomaResponseDTO.setWithHonor(withHonor);
+            REPOSITORY.insert(diplomaResponseDTO);
+            return diplomaResponseDTO;
+        }
+        return null;
+    }
+
     public boolean delete(Integer id) {
         return REPOSITORY.removeById(id);
     }
