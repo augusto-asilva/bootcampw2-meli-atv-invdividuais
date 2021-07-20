@@ -1,4 +1,4 @@
-#Pratica Individual SQL - 20/07/2021
+# Pratica Individual SQL - 20/07/2021
 
 **1.) Explique o conceito de normalização e para que é usado.**
 
